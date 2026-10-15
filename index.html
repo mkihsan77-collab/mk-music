@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f3f0e8">
+    <title>MK MUSIC URL — music links, made shorter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="wordmark" href="/" aria-label="MK MUSIC URL home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span>MK MUSIC URL</span>
+      </a>
+      <span class="topbar-note">A little less link. A lot more listen.</span>
+      <a class="topbar-link" href="#your-links">Your links <span aria-hidden="true">↓</span></a>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="live-dot"></span> YOUR MUSIC, ONE SHORT LINK</p>
+          <h1 id="hero-title">Good music.<br><span>Shorter links.</span></h1>
+          <p class="hero-description">Turn that mile-long music URL into something you can actually share.</p>
+          <div class="platforms" aria-label="Supported platforms">
+            <span>Spotify</span><span>YouTube</span><span>Apple Music</span><span>SoundCloud</span><span>Bandcamp</span>
+          </div>
+        </div>
+
+        <div class="disc-art" aria-hidden="true">
+          <div class="record"><div class="record-label"><span>PLAY<br>IT LOUD</span><i></i></div></div>
+          <span class="disc-caption">SIDE A<br>YOUR NEXT FAVORITE</span>
+          <span class="disc-spark">✳</span>
+        </div>
+      </section>
+
+      <section class="tool" aria-label="Create a short music link">
+        <form id="shorten-form" novalidate>
+          <label for="music-url">Paste a music link</label>
+          <div class="input-row">
+            <input id="music-url" name="url" type="url" placeholder="https://open.spotify.com/track/..." autocomplete="url" required>
+            <button class="shorten-button" type="submit">Make it short <span aria-hidden="true">↗</span></button>
+          </div>
+          <p id="form-message" class="form-message" role="status" aria-live="polite">Use a Spotify, YouTube, Apple Music, SoundCloud, or Bandcamp link.</p>
+        </form>
+
+        <div id="result" class="result" hidden>
+          <div class="result-copy">
+            <span class="result-label">YOUR MK MUSIC URL INVITE LINK</span>
+            <a id="short-link" class="short-link" href="#"></a>
+          </div>
+          <button id="copy-button" class="copy-button" type="button">Copy invite link</button>
+        </div>
+        <p class="local-note"><span aria-hidden="true">◉</span> Demo mode: links resolve in this browser only.</p>
+      </section>
+
+      <section id="your-links" class="links-section" aria-labelledby="links-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow section-eyebrow">THE RECENT ROTATION</p>
+            <h2 id="links-title">Your links</h2>
+          </div>
+          <button id="clear-links" class="clear-button" type="button" hidden>Clear all</button>
+        </div>
+        <div id="links-list" class="links-list"></div>
+        <p id="empty-state" class="empty-state">Your next repeat-worthy link goes here.</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Made for sharing what you love.</span>
+      <span class="footer-domain">MK MUSIC URL <span aria-hidden="true">✳</span></span>
+    </footer>
+  </body>
+</html>
