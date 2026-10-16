@@ -1,80 +1,265 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#f3f0e8">
-    <title>MK MUSIC URL — music links, made shorter</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <script src="app.js" defer></script>
-  </head>
-  <body>
-    <header class="topbar">
-      <a class="wordmark" href="/" aria-label="MK MUSIC URL home">
-        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span>MK MUSIC URL</span>
-      </a>
-      <span class="topbar-note">A little less link. A lot more listen.</span>
-      <a class="topbar-link" href="#your-links">Your links <span aria-hidden="true">↓</span></a>
-    </header>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MK Music — MP3 Upload & Share</title>
+  <meta name="description" content="Upload and share your music files with MK Music.">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #0b0c10;
+      color: #f6f7fb;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      padding: 22px 7%;
+      border-bottom: 1px solid #292b35;
+      background: #111218;
+      font-size: 23px;
+      font-weight: 800;
+    }
+    header span { color: #36e58c; }
+    main { width: min(720px, 92%); margin: 48px auto; }
+    .hero { text-align: center; margin-bottom: 30px; }
+    .hero h1 { font-size: clamp(30px, 6vw, 44px); margin-bottom: 12px; }
+    .hero p, .muted { color: #a8aab8; line-height: 1.6; }
+    .panel {
+      background: #151720;
+      border: 1px solid #2b2e3b;
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .drop {
+      display: block;
+      border: 2px dashed #454958;
+      border-radius: 14px;
+      padding: 32px 15px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .drop:hover { border-color: #36e58c; }
+    .symbol { font-size: 42px; margin-bottom: 12px; }
+    input[type=file] { display: none; }
+    input[type=text] {
+      width: 100%;
+      padding: 13px;
+      background: #0b0c10;
+      border: 1px solid #383b49;
+      border-radius: 9px;
+      color: white;
+      margin: 10px 0 16px;
+    }
+    button, .action {
+      border: 0;
+      border-radius: 9px;
+      padding: 13px 17px;
+      background: #36e58c;
+      color: #08150e;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+    }
+    button:disabled { opacity: .5; cursor: not-allowed; }
+    .full { width: 100%; }
+    .status { margin-top: 15px; color: #d1d4df; overflow-wrap: anywhere; }
+    progress { width: 100%; height: 10px; margin-top: 15px; accent-color: #36e58c; }
+    .result { display: none; }
+    .result a { color: #36e58c; overflow-wrap: anywhere; }
+    .result audio { width: 100%; margin: 15px 0; }
+    .share { display: flex; gap: 8px; margin-top: 14px; }
+    .share input { flex: 1; min-width: 0; margin: 0; }
+    footer { text-align: center; padding: 25px; color: #777b8a; font-size: 13px; }
+    .small { font-size: 12px; color: #a8aab8; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <header>MK <span>MUSIC</span></header>
 
-    <main>
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-copy">
-          <p class="eyebrow"><span class="live-dot"></span> YOUR MUSIC, ONE SHORT LINK</p>
-          <h1 id="hero-title">Good music.<br><span>Shorter links.</span></h1>
-          <p class="hero-description">Turn that mile-long music URL into something you can actually share.</p>
-          <div class="platforms" aria-label="Supported platforms">
-            <span>Spotify</span><span>YouTube</span><span>Apple Music</span><span>SoundCloud</span><span>Bandcamp</span>
-          </div>
-        </div>
+  <main>
+    <section class="hero">
+      <h1>Upload. Share. Listen. 🎵</h1>
+      <p>Upload your MP3 and get a shareable music link.</p>
+    </section>
 
-        <div class="disc-art" aria-hidden="true">
-          <div class="record"><div class="record-label"><span>PLAY<br>IT LOUD</span><i></i></div></div>
-          <span class="disc-caption">SIDE A<br>YOUR NEXT FAVORITE</span>
-          <span class="disc-spark">✳</span>
-        </div>
-      </section>
+    <section class="panel">
+      <h2>Upload your music</h2>
+      <p class="muted">Choose an audio file from your device.</p>
 
-      <section class="tool" aria-label="Create a short music link">
-        <form id="shorten-form" novalidate>
-          <label for="music-url">Paste a music link</label>
-          <div class="input-row">
-            <input id="music-url" name="url" type="url" placeholder="https://open.spotify.com/track/..." autocomplete="url" required>
-            <button class="shorten-button" type="submit">Make it short <span aria-hidden="true">↗</span></button>
-          </div>
-          <p id="form-message" class="form-message" role="status" aria-live="polite">Use a Spotify, YouTube, Apple Music, SoundCloud, or Bandcamp link.</p>
-        </form>
+      <label class="drop" for="file">
+        <div class="symbol">☁️</div>
+        <strong id="fileLabel">Choose an audio file</strong>
+        <p class="muted">MP3, WAV, M4A or OGG · Maximum 20 MB</p>
+        <span class="action">Select file</span>
+      </label>
+      <input id="file" type="file" accept=".mp3,.wav,.m4a,.ogg,audio/*">
 
-        <div id="result" class="result" hidden>
-          <div class="result-copy">
-            <span class="result-label">YOUR MK MUSIC URL INVITE LINK</span>
-            <a id="short-link" class="short-link" href="#"></a>
-          </div>
-          <button id="copy-button" class="copy-button" type="button">Copy invite link</button>
-        </div>
-        <p class="local-note"><span aria-hidden="true">◉</span> Demo mode: links resolve in this browser only.</p>
-      </section>
+      <label for="title">Song title (optional)</label>
+      <input id="title" type="text" maxlength="100"
+             placeholder="Enter the song name">
 
-      <section id="your-links" class="links-section" aria-labelledby="links-title">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow section-eyebrow">THE RECENT ROTATION</p>
-            <h2 id="links-title">Your links</h2>
-          </div>
-          <button id="clear-links" class="clear-button" type="button" hidden>Clear all</button>
-        </div>
-        <div id="links-list" class="links-list"></div>
-        <p id="empty-state" class="empty-state">Your next repeat-worthy link goes here.</p>
-      </section>
-    </main>
+      <button id="upload" class="full" disabled>Upload to MK Music</button>
+      <progress id="progress" value="0" max="100" hidden></progress>
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+    </section>
 
-    <footer class="footer">
-      <span>Made for sharing what you love.</span>
-      <span class="footer-domain">MK MUSIC URL <span aria-hidden="true">✳</span></span>
-    </footer>
-  </body>
+    <section id="result" class="panel result">
+      <h2>✅ Upload complete!</h2>
+      <p id="resultTitle"></p>
+      <audio id="audio" controls></audio>
+      <p class="muted">Your shareable file URL:</p>
+      <div class="share">
+        <input id="url" type="text" readonly aria-label="Share URL">
+        <button id="copy">Copy link</button>
+      </div>
+      <p><a id="open" class="action" target="_blank" rel="noopener">Open / Download file</a></p>
+      <p class="small">Anyone with this link may be able to access the uploaded file.</p>
+    </section>
+
+    <section class="panel">
+      <h3>How it works</h3>
+      <p class="muted">1. Choose your audio file.</p>
+      <p class="muted">2. Upload it to cloud storage.</p>
+      <p class="muted">3. Copy and share the resulting URL.</p>
+    </section>
+  </main>
+
+  <footer>© <span id="year"></span> MK Music</footer>
+
+  <script>
+    // Replace these with your Cloudinary dashboard values.
+    const CLOUD_NAME = "YOUR_CLOUD_NAME";
+    const UPLOAD_PRESET = "mk_music_upload";
+    const MAX_SIZE = 20 * 1024 * 1024;
+
+    const fileInput = document.getElementById("file");
+    const uploadButton = document.getElementById("upload");
+    const status = document.getElementById("status");
+    const progress = document.getElementById("progress");
+    const result = document.getElementById("result");
+
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+    const allowed = ["mp3", "wav", "m4a", "ogg"];
+
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files[0];
+      result.style.display = "none";
+      status.textContent = "";
+      uploadButton.disabled = !file;
+
+      if (!file) {
+        document.getElementById("fileLabel").textContent =
+          "Choose an audio file";
+        return;
+      }
+
+      document.getElementById("fileLabel").textContent = file.name;
+
+      const extension = file.name.split(".").pop().toLowerCase();
+      if (!allowed.includes(extension)) {
+        status.textContent = "Please choose an MP3, WAV, M4A or OGG file.";
+        uploadButton.disabled = true;
+      } else if (file.size > MAX_SIZE) {
+        status.textContent = "File is too large. Maximum size is 20 MB.";
+        uploadButton.disabled = true;
+      } else {
+        status.textContent =
+          "Ready to upload · " + (file.size / 1024 / 1024).toFixed(2) + " MB";
+      }
+    });
+
+    uploadButton.addEventListener("click", () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      if (CLOUD_NAME === "YOUR_CLOUD_NAME" || !UPLOAD_PRESET) {
+        status.textContent =
+          "Setup needed: enter your Cloud Name and upload preset in the code.";
+        return;
+      }
+
+      uploadButton.disabled = true;
+      progress.hidden = false;
+      progress.value = 0;
+      result.style.display = "none";
+      status.textContent = "Uploading your file…";
+
+      const data = new FormData();
+      data.append("file", file);
+      data.append("upload_preset", UPLOAD_PRESET);
+
+      const xhr = new XMLHttpRequest();
+      xhr.open(
+        "POST",
+        "https://api.cloudinary.com/v1_1/" +
+          encodeURIComponent(CLOUD_NAME) + "/video/upload"
+      );
+
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          progress.value = Math.round(event.loaded / event.total * 100);
+          status.textContent = "Uploading… " + progress.value + "%";
+        }
+      };
+
+      xhr.onload = () => {
+        uploadButton.disabled = false;
+        let response;
+
+        try {
+          response = JSON.parse(xhr.responseText);
+        } catch {
+          status.textContent = "The server returned an unexpected response.";
+          return;
+        }
+
+        if (xhr.status < 200 || xhr.status >= 300 || !response.secure_url) {
+          status.textContent =
+            "Upload failed: " +
+            (response.error?.message || "Check your Cloudinary settings.");
+          return;
+        }
+
+        const url = response.secure_url;
+        const title = document.getElementById("title").value.trim()
+          || file.name;
+
+        document.getElementById("resultTitle").textContent = title;
+        document.getElementById("url").value = url;
+        document.getElementById("audio").src = url;
+        document.getElementById("open").href = url;
+        result.style.display = "block";
+        status.textContent = "Upload successful!";
+        result.scrollIntoView({ behavior: "smooth" });
+      };
+
+      xhr.onerror = () => {
+        uploadButton.disabled = false;
+        status.textContent = "Network error. Please try again.";
+      };
+
+      xhr.send(data);
+    });
+
+    document.getElementById("copy").addEventListener("click", async () => {
+      const url = document.getElementById("url").value;
+      try {
+        await navigator.clipboard.writeText(url);
+        document.getElementById("copy").textContent = "Copied!";
+      } catch {
+        document.getElementById("url").select();
+        document.execCommand("copy");
+        document.getElementById("copy").textContent = "Copy attempted";
+      }
+    });
+  </script>
+</body>
 </html>
